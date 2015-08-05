@@ -43,6 +43,20 @@ class ChronosClient(object):
         """List all jobs on Chronos."""
         return self._call("/scheduler/jobs", "GET")
 
+    def graph(self):
+        """Get a CSV representation of the graph of all Chronos jobs.
+
+        This (undocumented) endpoint is used by the Chronos web frontend to
+        determine basic status information (e.g. success of last run). It is
+        useful for producing your own status overview without reimplementing
+        the logic housed in the API.
+
+        Returns a list of strings, comma-separated values each representing an
+        entity in the DAG of all Chronos jobs.
+        """
+        raw_result = self._call("/scheduler/graph/csv", "GET")
+        return raw_result.splitlines()
+
     def delete(self, name):
         """Delete a job by name"""
         path = "/scheduler/job/%s" % name
